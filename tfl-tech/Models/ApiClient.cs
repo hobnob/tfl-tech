@@ -21,6 +21,14 @@ namespace tfl_tech.Models
                 throw new ArgumentException("HttpClient is not configured with a base address. Please set the base address to the TFL API root");
             }
 
+            if (string.IsNullOrEmpty(appId)) {
+                throw new ArgumentNullException("App ID must not be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(developerKey)) {
+                throw new ArgumentNullException("Developer Key must not be null or empty");
+            }
+
             httpClient = initHttpClient;
             this.appId = appId;
             this.developerKey = developerKey;

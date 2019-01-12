@@ -2,7 +2,6 @@ using NUnit.Framework;
 using Moq;
 using System.Net.Http;
 using System.Net;
-using System.Threading.Tasks;
 using tfl_tech.Models;
 
 namespace Tests
@@ -64,11 +63,17 @@ namespace Tests
 
             // Set up our road responses - A234 returns a server error
             mockHttpClient
-                .Setup(m => m.Get("https://example.com/Road/A233?app_id=APP_ID&app_key=DEVELOPER_ID"))
+                .Setup(m => m.Get("https://example.com/Road/A234?app_id=APP_ID&app_key=DEVELOPER_ID"))
                 .Returns(
                     new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 )
             ;
+        }
+
+        [Test]
+        public void TestConstructor()
+        {
+            Assert.Catch<System.ArgumentNullException>(() => new ApiClient(null, null, null));
         }
 
         [Test]
@@ -82,6 +87,24 @@ namespace Tests
             Assert.AreEqual("A2", a2Result.displayName);
             Assert.AreEqual("Good", a2Result.statusSeverity);
             Assert.AreEqual("No Exceptional Delays", a2Result.statusSeverityDescription);
+        }
+
+        [Test]
+        public void TestInvalidRoad()
+        {
+            ApiClient client = new ApiClient(mockHttpClient.Object, "APP_ID", "DEVELOPER_ID");
+
+            // Get the result for the A233 - should throw an exception
+            Assert.Catch<System.ArgumentException>(() => client.GetRoadStatus("A233"));
+        }
+
+        [Test]
+        public void TestServerError()
+        {
+            ApiClient client = new ApiClient(mockHttpClient.Object, "APP_ID", "DEVELOPER_ID");
+
+            // Get the result for the A233 - should throw an exception
+            Assert.Catch<System.Exception>(() => client.GetRoadStatus("A234"));
         }
     }
 }
