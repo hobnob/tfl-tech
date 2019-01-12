@@ -4,7 +4,7 @@ using tfl_tech.Views;
 
 namespace tfl_tech.Controllers
 {
-    class ApiController
+    public class ApiController
     {
         private ApiClient apiClient;
 
