@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
+using tfl_tech.Controllers;
 using tfl_tech.Models;
+using tfl_tech.Views;
 
 namespace tfl_tech
 {
@@ -14,28 +16,17 @@ namespace tfl_tech
                 return 1;
             }
 
-            HttpClientWrapper httpClient = new HttpClientWrapper();
-            httpClient.BaseAddress = new Uri(ConfigurationManager.AppSettings["tfl_api"]);
-
-            ApiClient client = new ApiClient(
-                httpClient,
+            ApiController controller = new ApiController(
+                new Uri(ConfigurationManager.AppSettings["tfl_api"]),
                 ConfigurationManager.AppSettings["app_id"],
-                ConfigurationManager.AppSettings["developer_key"]
+                ConfigurationManager.AppSettings["developer_key"],
+                new HttpClientWrapper()
             );
 
-            try {
-                Console.WriteLine(client.GetRoadStatus(args[0]).ToFormattedString());
-            } catch (ArgumentException) {
-                Console.WriteLine(args[0] + " is not a valid road");
+            IView view = controller.GetRoad(args[0]);
 
-                return 1;
-            } catch (Exception e) {
-                Console.WriteLine(e.Message);
-
-                return 1;
-            }
-
-            return 0;
+            Console.WriteLine(view.Output);
+            return view.StatusCode;
         }
     }
 }
