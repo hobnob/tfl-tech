@@ -17,13 +17,9 @@ namespace tfl_tech.Models
 
         private HttpClient httpClient;
 
-        public HttpClientWrapper(HttpClient initclient)
+        public HttpClientWrapper(HttpClient initclient = null)
         {
-            if (initclient == null) {
-                throw new ArgumentNullException("HttpClient cannot be null");
-            }
-
-            httpClient = initclient;
+            httpClient = initclient ?? new HttpClient();
         }
 
         public HttpResponseMessage Get(string uri)
