@@ -7,11 +7,11 @@ namespace tfl_tech.Models
 {
     public class ApiClient
     {
-        private HttpClient httpClient;
+        private IHttpClient httpClient;
         private string appId;
         private string developerKey;
 
-        public ApiClient(HttpClient initHttpClient, string appId, string developerKey)
+        public ApiClient(IHttpClient initHttpClient, string appId, string developerKey)
         {
             if (initHttpClient == null) {
                 throw new ArgumentNullException("HttpClient cannot be null");
@@ -27,15 +27,13 @@ namespace tfl_tech.Models
         }
 
         public RoadStatus GetRoadStatus(string roadName)
-        {
-            UriBuilder uri = new UriBuilder("/Road/" + roadName);
-            uri.Query = "app_id=" + appId + "&app_key=" + developerKey;
-
-            HttpResponseMessage response = httpClient.GetAsync(uri.Uri).Result;
+        {            
+            Uri uri = new Uri(httpClient.BaseAddress, "/Road/" + roadName + "?app_id=" + appId + "&app_key=" + developerKey);
+            HttpResponseMessage response = httpClient.Get(uri.ToString());
 
             switch (response.StatusCode) {
                 case HttpStatusCode.OK:
-                    return JsonConvert.DeserializeObject<RoadStatus>(response.Content.ToString());
+                    return JsonConvert.DeserializeObject<RoadStatus[]>(response.Content.ReadAsStringAsync().Result)[0];
                 case HttpStatusCode.NotFound:
                     throw new ArgumentException(roadName + " is not a valid road");
                 default:
