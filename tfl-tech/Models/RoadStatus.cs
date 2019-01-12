@@ -1,14 +1,31 @@
-﻿
-using System.Text;
+﻿using System.Text;
 
 namespace tfl_tech.Models
 {
+    /// <summary>
+    /// A structure for storing the status of a road
+    /// </summary>
     public struct RoadStatus
     {
+        /// <summary>
+        /// The display name for the road
+        /// </summary>
         public string displayName;
+
+        /// <summary>
+        /// The severity status of the road
+        /// </summary>
         public string statusSeverity;
+
+        /// <summary>
+        /// A more detailed description of the severity
+        /// </summary>
         public string statusSeverityDescription;
 
+        /// <summary>
+        /// Formats the data so that it can be output
+        /// </summary>
+        /// <returns>A string of the data</returns>
         public string ToFormattedString()
         {
             StringBuilder str = new StringBuilder();
