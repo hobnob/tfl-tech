@@ -73,7 +73,27 @@ namespace Tests
         [Test]
         public void TestConstructor()
         {
-            Assert.Catch<System.ArgumentNullException>(() => new ApiClient(null, null, null));
+            HttpClientWrapper httpClient = new HttpClientWrapper(new HttpClient());
+
+            // Test with no params
+            Assert.Catch<System.ArgumentNullException>(() => new ApiClient(null, "id", "key"));
+
+            // Test with empty base address
+            Assert.Catch<System.ArgumentException>(() => new ApiClient(httpClient, "id", "key"));
+
+            httpClient.BaseAddress = new System.Uri("https://example.com");
+
+            // Test with null App ID
+            Assert.Catch<System.ArgumentNullException>(() => new ApiClient(httpClient, null, "key"));
+
+            // Test with empty App ID
+            Assert.Catch<System.ArgumentNullException>(() => new ApiClient(httpClient, "", "key"));
+
+            // Test with null Dev Key
+            Assert.Catch<System.ArgumentNullException>(() => new ApiClient(httpClient, "id", null));
+
+            // Test with empty Dev Key
+            Assert.Catch<System.ArgumentNullException>(() => new ApiClient(httpClient, "id", ""));
         }
 
         [Test]
