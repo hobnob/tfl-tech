@@ -51,11 +51,11 @@ namespace tfl_tech.Controllers
         public IView GetRoad(string roadName)
         {
             try {
-                return new ConsoleView(apiClient.GetRoadStatus(roadName).ToFormattedString());
+                return new StringView(apiClient.GetRoadStatus(roadName).ToFormattedString());
             } catch (ArgumentException) {
-                return new ConsoleView(roadName + " is not a valid road", 1);
+                return new StringView(roadName + " is not a valid road", 1);
             } catch (Exception e) {
-                return new ConsoleView(e.Message, 1);
+                return new StringView(e.Message, 1);
             }
         }
     }

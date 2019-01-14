@@ -2,9 +2,9 @@
 namespace tfl_tech.Views
 {
     /// <summary>
-    /// A view for printing to the console
+    /// A view for outputting a string
     /// </summary>
-    public class ConsoleView : IView
+    public class StringView : IView
     {
         /// <summary>
         /// The string output of the view
@@ -17,11 +17,11 @@ namespace tfl_tech.Views
         public int StatusCode { get; private set; }
 
         /// <summary>
-        /// Creates a new Console View
+        /// Creates a new String View
         /// </summary>
         /// <param name="message">The string output to use</param>
         /// <param name="status">The status of the message (0 is OK, everything else represents an error)</param>
-        public ConsoleView(string message, int status = 0)
+        public StringView(string message, int status = 0)
         {
             Output = message;
             StatusCode = status;
